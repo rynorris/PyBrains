@@ -19,9 +19,11 @@ class Main:
         self.draw = True
         self.drawBrains = True
         self.paused = False
-        self.ARENA_SCALE = 2
-        self.MAX_FOOD = 8*self.ARENA_SCALE**2
-        self.artist = Artist(scale=self.ARENA_SCALE)
+        self.ARENA_WIDTH = 2000
+        self.ARENA_HEIGHT = 1400
+        self.DRAW_SCALE = 0.5
+        self.MAX_FOOD = 50
+        self.artist = Artist(self.ARENA_WIDTH, self.ARENA_HEIGHT, scale=self.DRAW_SCALE)
         self.focusedCreature = None
         self.filename = None
         self.generation = 1
@@ -40,8 +42,8 @@ class Main:
                 c = Creature(DNA=brainUtils.randBinary((5 + 6*5+3*5)*8))
             else:
                 c = mother.breed(father)
-            c.x = (random.random()*525 + 100)*self.ARENA_SCALE
-            c.y = (random.random()*400 + 50)*self.ARENA_SCALE
+            c.x = (random.random()*(self.ARENA_WIDTH-50) + 50)
+            c.y = (random.random()*(self.ARENA_HEIGHT-50) + 50)
             self.creatures.append(c)
 
     def randomiseFood(self):
@@ -49,8 +51,8 @@ class Main:
             self.spawnFood()
 
     def spawnFood(self):
-        x = (random.random()*525 + 100)*self.ARENA_SCALE
-        y = (random.random()*400 + 50)*self.ARENA_SCALE
+        x = (random.random()*(self.ARENA_WIDTH-50) + 50)
+        y = (random.random()*(self.ARENA_HEIGHT-50) + 50)
         f = Food(x,y,40)
         self.food.append(f)
 
@@ -169,8 +171,8 @@ class Main:
                     if event.button==1:
                         d = 100000000
                         closest = None
-                        x = event.pos[0] * self.ARENA_SCALE
-                        y = event.pos[1] * self.ARENA_SCALE
+                        x = event.pos[0] / self.DRAW_SCALE
+                        y = event.pos[1] / self.DRAW_SCALE
                         for c in self.creatures:
                             dist = (c.x-x)**2+(c.y-y)**2
                             if dist < d:
@@ -198,8 +200,8 @@ class Main:
                 for c in self.creatures:
                     if c.update() == 0:
                         self.dying.append(c)
-                    c.x = min(640*self.ARENA_SCALE-25,max(25,c.x))
-                    c.y = min(480*self.ARENA_SCALE-25,max(25,c.y))
+                    c.x = min(self.ARENA_WIDTH-25,max(25,c.x))
+                    c.y = min(self.ARENA_HEIGHT-25,max(25,c.y))
 
                     for f in self.food:
                         if c.canEat(f):
@@ -228,8 +230,8 @@ class Main:
                         self.artist.drawCreatureBrain(c)
 
                 if self.focusedCreature!=None:
-                    s = 200*self.ARENA_SCALE
-                    loc = (-s/5, -s/8)
+                    s = 200/self.DRAW_SCALE
+                    loc = (int(-s/5), int(-s/8))
                     self.artist.drawCreatureBrain(self.focusedCreature,
                                               size=s,pos=loc)
 

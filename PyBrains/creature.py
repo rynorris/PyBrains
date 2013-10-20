@@ -123,8 +123,8 @@ class Creature(object):
         self.rAntenna = Antenna(self,5,7)
         self.antennae = []
         
-        self.lEye = Eye(self,10,20,500)
-        self.rEye = Eye(self,-10,20,500)
+        self.lEye = Eye(self,10,8,500)
+        self.rEye = Eye(self,-10,8,500)
         self.eyes = [self.lEye, self.rEye]
 
         self.fBooster = Booster(self)

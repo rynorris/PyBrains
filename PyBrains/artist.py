@@ -22,12 +22,12 @@ class Artist:
         self.height=height
         self.scale = scale
         """Create Screen"""
-        self.screen = pygame.display.set_mode((self.width,self.height))
-        self.canvas = pygame.Surface((width*scale,height*scale))
+        self.screen = pygame.display.set_mode((int(self.width*self.scale),int(self.height*self.scale)))
+        self.canvas = pygame.Surface((width,height))
 
     def drawBackground(self, colour=(255,255,255)):
         pygame.draw.rect(self.canvas, colour,
-                         [0,0,self.width*self.scale,self.height*self.scale])
+                         [0,0,self.width,self.height])
 
     def drawBrain(self, brain, xPos, yPos, size=50, orientation = 0.0):
         s = pygame.Surface((size,size))
@@ -135,7 +135,7 @@ class Artist:
         for node in nodes.keys():
             brightness = min(int(node.currentCharge*255), 255)
             pygame.draw.circle(s, (brightness,brightness,0),
-                               nodes[node], size/30, 0)
+                               (int(nodes[node][0]),int(nodes[node][1])), int(size/30), 0)
 
         if pos==None:
             s = pygame.transform.rotate(s, math.degrees(creature.facing)-90)
@@ -192,7 +192,7 @@ class Artist:
                            (int(creature.x),int(creature.y)),
                            int(size/10),4)
         
-        FONT_SIZE = 15*self.scale
+        FONT_SIZE = int(15/self.scale)
         FONT_COLOUR = (0,0,100)
         font = pygame.font.Font(None,FONT_SIZE)
         render = font.render(str(creature.age),True, FONT_COLOUR)
@@ -208,12 +208,12 @@ class Artist:
                            int(food.size+10))
 
     def drawTextLog(self, log):
-        FONT_SIZE = 20*self.scale
+        FONT_SIZE = int(20/self.scale)
         FONT_COLOUR = (0,0,100)
         font = pygame.font.Font(None,FONT_SIZE)
 
         dy = FONT_SIZE + 2
-        y = self.height*self.scale - dy - 5
+        y = self.height - dy - 5
         x = 5
 
         for line in log.lines:
@@ -222,7 +222,7 @@ class Artist:
             y -= dy
 
     def paint(self):
-        pygame.transform.scale(self.canvas,(self.width,self.height),self.screen)
+        pygame.transform.scale(self.canvas,(int(self.width*self.scale),int(self.height*self.scale)),self.screen)
         pygame.display.flip()
 
     def destroy(self):
