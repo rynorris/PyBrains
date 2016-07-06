@@ -106,8 +106,8 @@ class Main:
                 mother = self.creatures[a]
                 father = self.creatures[b]
                 c = mother.breed(father)
-                c.x = (random.random()*525 + 100)*self.ARENA_SCALE
-                c.y = (random.random()*400 + 50)*self.ARENA_SCALE
+                c.x = (random.random()*(self.ARENA_WIDTH - 50) + 50)
+                c.y = (random.random()*(self.ARENA_HEIGHT - 50) + 50)
                 self.creatures.append(c)
 
             self.textLog.push("Generation "+str(self.generation)+" survived "+str(self.genTime)+" steps.")
